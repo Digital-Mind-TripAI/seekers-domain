@@ -19,7 +19,7 @@ export function PlaygroundPanel() {
   if (mode === "door") {
     return (
       <OakDoorScene
-        onActivated={() => {
+        onEnter={() => {
           // later we can add fade/transition – for now, hard swap
           setMode("corridor");
         }}
