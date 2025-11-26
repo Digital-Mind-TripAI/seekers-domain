@@ -1,3 +1,4 @@
+// f:\Git_Repository\seekers-domain\seekers-domain\tsconfig.json
 {
   "compilerOptions": {
     "target": "ESNext",
@@ -16,5 +17,5 @@
     "jsx": "react-jsx",
     "types": ["vite/client"]
   },
-  "include": ["src"]
+  "include": ["src", "vite.config.ts"]
 }
