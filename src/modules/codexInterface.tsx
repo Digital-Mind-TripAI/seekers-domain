@@ -1,11 +1,6 @@
 import React from "react";
 
 import type { CSSProperties } from "react";
-/**
- * Local types for the Codex interface.
- * These are intentionally minimal so we don't fight with the existing
- * core/types.ts yet.
- */
 
 interface CognitiveSignature {
   mbtiType: string | null;
@@ -393,7 +388,7 @@ export const CodexInterface: React.FC = () => {
             background: "rgba(2,3,15,0.9)",
             fontSize: "12px",
             opacity: "0.85",
-          }}
+ }}
         >
           <div style={{ fontSize: "11px", opacity: "0.7", marginBottom: "4px" }}>
             TOOL TIP
