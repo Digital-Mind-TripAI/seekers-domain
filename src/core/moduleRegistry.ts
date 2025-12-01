@@ -1,19 +1,18 @@
-import type { Realm } from "./types";
-import { codexRealm } from "../modules/codex";
+// src/core/moduleRegistry.ts
+import type { NexusModule } from "./types";
+import { handbookModule } from "../modules/handbook";
+// import { studioModule } from "../modules/studio";
+// import { annexModule } from "../modules/annex";
+// import { profileModule } from "../modules/profile";
+// import { questsModule } from "../modules/quests";
+// import { communityModule } from "../modules/community";
 
-/**
- * All active Realms in the HyperVerse.
- *
- * Note:
- * - We keep the export name `modules` for now so the rest of the app doesn't break.
- * - Internally, these are now "Realms" instead of "Modules".
- */
-export const modules: Realm[] = [
-  codexRealm,
-  // Future:
-  // nexusRealm, // Placeholder for the main Nexus realm
-  // annexRealm, // Placeholder for the Annex realm
-  // profileRealm, // Placeholder for the Seeker Profile realm
-  // questsRealm, // Placeholder for the Quests realm
-  // communityRealm, // Placeholder for the Community realm
+export const modules: NexusModule[] = [
+  handbookModule,
+
+  // studioModule,
+  // annexModule,
+  // profileModule,
+  // questsModule,
+  // communityModule,
 ];
