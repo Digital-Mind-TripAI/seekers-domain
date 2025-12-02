@@ -1,8 +1,8 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { AppShell } from "./layout/AppShell";
-import { HandbookPanel } from "./modules/handbook/HandbookPanel";
-import { StudioPanel } from "./modules/studio/StudioPanel";
-import { PlaygroundPanel } from "./modules/playground/PlaygroundPanel";
+import { AppShell } from "../layout/AppShell";
+import { HandbookPanel } from "./handbook/HandbookPanel";
+import { StudioPanel } from "./studio/StudioPanel";
+import { PlaygroundPanel } from "./playground/PlaygroundPanel";
 
 export default function App() {
   return (

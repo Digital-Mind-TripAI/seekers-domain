@@ -10,14 +10,25 @@
      Replace the entire contents of src/scenes/OakDoorScene.tsx
 */
 
-import { Canvas, useFrame, useLoader } from "@react-three/fiber";
-import { TextureLoader, MeshBasicMaterial, Group } from "three";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { Suspense, useEffect, useRef, useState } from "react";
+import { TextureLoader, MeshBasicMaterial, Group, Texture } from "three";
 import { OrbitControls } from "@react-three/drei";
-import { useRef, useState } from "react";
 import "./OakDoorScene.css";
 
 function OakDoorGroup({ onActivated }: { onActivated?: () => void }) {
-  const texture = useLoader(TextureLoader, "/oak-door-main.png");
+  const [texture, setTexture] = useState<Texture | null>(null);
+
+  useEffect(() => {
+    const loader = new TextureLoader();
+    // try to load the texture from public/; if it fails we keep `texture` null
+    loader.load(
+      "/opak-door-main.jpg",
+      (tex) => setTexture(tex),
+      undefined,
+      () => setTexture(null)
+    );
+  }, []);
 
   const glowMatRef = useRef<MeshBasicMaterial | null>(null);
   const groupRef = useRef<Group | null>(null);
@@ -88,12 +99,11 @@ function OakDoorGroup({ onActivated }: { onActivated?: () => void }) {
         }}
       >
         <planeGeometry args={[5.0, 4.0]} />
-        <meshStandardMaterial
-          map={texture}
-          // a tiny bit of emissive so it never looks dead
-          emissive="#23180f"
-          emissiveIntensity={0.25}
-        />
+        {texture ? (
+          <meshStandardMaterial map={texture} emissive="#23180f" emissiveIntensity={0.25} />
+        ) : (
+          <meshStandardMaterial color="#6b4b2b" emissive="#23180f" emissiveIntensity={0.08} />
+        )}
       </mesh>
     </group>
   );
@@ -110,7 +120,9 @@ export function OakDoorScene({ onActivated }: { onActivated?: () => void }) {
         <directionalLight position={[4, 6, 4]} intensity={1.4} />
         <directionalLight position={[-4, 3, 2]} intensity={0.5} />
 
-        <OakDoorGroup onActivated={onActivated} />
+        <Suspense fallback={null}>
+          <OakDoorGroup onActivated={onActivated} />
+        </Suspense>
 
         <OrbitControls
           enablePan={false}
