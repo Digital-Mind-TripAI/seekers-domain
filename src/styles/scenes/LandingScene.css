@@ -1,0 +1,37 @@
+/* FILE: src/styles/scenes/LandingScene.css */
+
+.landing-root {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: radial-gradient(
+    circle at top,
+    rgba(15, 23, 42, 0.9) 0,
+    #020208 40%,
+    #000000 100%
+  );
+  color: #f9fafb;
+  overflow: hidden;
+}
+
+/* Debug banner at the top so we can see HTML even if Canvas fails */
+.landing-debug-banner {
+  font-size: 0.75rem;
+  padding: 0.35rem 0.75rem;
+  background: rgba(15, 23, 42, 0.95);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.35);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.landing-canvas-container {
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+  position: relative;
+}
+
+.landing-canvas-container canvas {
+  cursor: pointer;
+}

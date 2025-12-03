@@ -1,0 +1,60 @@
+{
+  "quest_id": "quest_001_desert_echo",
+  "title": "Protocol: Desert Echo",
+  "narrative_context": "To know the value of water, you must first know thirst. The modern mind is drowning in noise. Your first protocol is a System Purge.",
+  "source_material": "The Seekers Academy Story - Page 40",
+  "requirements": {
+    "min_level": 1,
+    "required_attribute": "none"
+  },
+  "target_attribute": "resilience",
+  
+  "stages": [
+    {
+      "stage_id": 1,
+      "type": "initiation",
+      "action": "start_timer",
+      "duration_hours": 24,
+      "environment_state": "desert_scorched",
+      "ui_message": "The heat is relentless. Do not drink from the noise.",
+      "restrictions": [
+        "no_social_media",
+        "no_news",
+        "no_streaming"
+      ]
+    },
+    {
+      "stage_id": 2,
+      "type": "verification",
+      "mechanism": "integrity_lock",
+      "description": "The 24 hours have passed. You must verify your actions. The System cannot see you, but the Stone can.",
+      "choices": [
+        {
+          "id": "choice_fail",
+          "label": "I DRANK THE SAND",
+          "outcome_text": "The desert is harsh. There is no shame in thirst. Rest and try again.",
+          "reset_timer": true,
+          "integrity_penalty": 0
+        },
+        {
+          "id": "choice_success",
+          "label": "I FOUND THE WATER",
+          "outcome_text": "Silence is the only water that quenches the mind.",
+          "input_required": "insight_log",
+          "integrity_reward": 2,
+          "attribute_reward": 5
+        }
+      ]
+    }
+  ],
+
+  "rewards": {
+    "artifact": {
+      "id": "lens_of_condensation",
+      "name": "Lens of Condensation",
+      "description": "A primitive but ingenious method of collecting clarity from the air.",
+      "visual_asset": "assets/artifacts/lens_01.png"
+    },
+    "lore_unlock": "archive_004_desert_wisdom"
+  }
+}

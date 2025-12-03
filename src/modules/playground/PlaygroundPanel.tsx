@@ -1,17 +1,10 @@
 // src/modules/playground/PlaygroundPanel.tsx
 
-import React from 'react';
-import { NexusPanel } from '../nexus';
+import { NexusPanel } from "../nexus";
 
-const PlaygroundPanel: React.FC = () => {
+const PlaygroundPanel = () => {
   return (
-    <div
-      style={{
-        width: '100%',
-        height: '100%',
-        backgroundColor: '#020617',
-      }}
-    >
+    <div style={{ width: "100%", height: "100%" }}>
       <NexusPanel />
     </div>
   );

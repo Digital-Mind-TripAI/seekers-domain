@@ -1,0 +1,83 @@
+{
+  "seeker_stone": {
+    "meta": {
+      "version": "1.0",
+      "axiom_type": "immutable_ledger"
+    },
+    "owner_handle": "FluxBlade",
+    "creation_timestamp": "2025-10-10T08:00:00Z",
+    
+    "core_attributes": {
+      "resonance": {
+        "label": "Contribution",
+        "value": 15,
+        "max_value": 100,
+        "visual_mapping": {
+          "property": "luminosity",
+          "min_hex": "#1a1a1a",
+          "max_hex": "#00ffff",
+          "description": "Controls the internal glow intensity of the stone."
+        }
+      },
+      "integrity": {
+        "label": "Adherence",
+        "value": 80,
+        "max_value": 100,
+        "visual_mapping": {
+          "property": "opacity",
+          "min_value": 0.3,
+          "max_value": 1.0,
+          "description": "Controls the transparency. 1.0 is crystal clear."
+        }
+      },
+      "resilience": {
+        "label": "Endurance",
+        "value": 45,
+        "max_value": 100,
+        "visual_mapping": {
+          "property": "roughness",
+          "min_value": 1.0,
+          "max_value": 0.0,
+          "description": "Controls surface texture. 0.0 is perfectly polished glass."
+        }
+      },
+      "momentum": {
+        "label": "Action",
+        "value": 30,
+        "max_value": 100,
+        "visual_mapping": {
+          "property": "rotation_speed",
+          "min_value": 0.0,
+          "max_value": 2.5,
+          "description": "Controls the idle rotation speed of the stone."
+        }
+      },
+      "focus": {
+        "label": "Presence",
+        "value": 90,
+        "max_value": 100,
+        "visual_mapping": {
+          "property": "vertex_jitter",
+          "min_value": 0.5,
+          "max_value": 0.0,
+          "description": "Controls digital noise. 0.0 is a stable signal."
+        }
+      },
+      "clarity": {
+        "label": "Understanding",
+        "value": 10,
+        "max_value": 100,
+        "visual_mapping": {
+          "property": "poly_count",
+          "min_value": 6,
+          "max_value": 2048,
+          "description": "Controls geometric complexity. High value = fractal geometry."
+        }
+      }
+    },
+    "inventory": {
+      "active_artifacts": [],
+      "stored_artifacts": []
+    }
+  }
+}
