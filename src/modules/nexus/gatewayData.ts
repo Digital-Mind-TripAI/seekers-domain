@@ -1,72 +1,83 @@
 // src/modules/nexus/gatewayData.ts
 
-export const gatewayData = {
+interface Portal {
+  id: string;
+  name: string;
+  route: string;
+  tone: string;
+  color: string;
+  position: [number, number, number]; // [x, y, z] for 3D placement
+}
+
+interface NexusGateway {
   outerVeil: {
-    text: "ENTER THE NEXUS",
-    vibe: "Ancient-tech fusion, low hum, energetic presence",
-  },
+    text: string;
+    vibe: string;
+  };
   threshold: {
-    welcome: "Welcome, traveler. You’ve reached the Threshold. What happens next is entirely yours.",
-    choices: [
-      { id: "curious", label: "I’m Curious", sub: "Explore gently" },
-      { id: "ready", label: "I’m Ready", sub: "Step into deeper engagement" },
-      { id: "returning", label: "I’m Returning", sub: "Resume where you left off" }
-    ]
+    welcome: string;
+    choices: Array<{ id: string; label: string; sub: string }>;
+  };
+  portals: Portal[];
+}
+
+export const gatewayData: NexusGateway = {
+  // The first screen the Seeker sees
+  outerVeil: {
+    text: "THE NEXUS",
+    vibe: "THE DIGITAL ALCHEMY PROJECT",
   },
+  // The second screen, where they choose their initial filter
+  threshold: {
+    welcome: "You stand at the Threshold. The world you see is a reflection of the lens you choose to look through. Select your initial filter, Seeker.",
+    choices: [
+      { id: "mind", label: "MIND", sub: "Logic, Analysis, Blueprint" },
+      { id: "emotion", label: "EMOTION", sub: "Energy, Resonance, Shadow" },
+      { id: "action", label: "ACTION", sub: "Discipline, Will, Manifestation" },
+    ],
+  },
+  
+  // The primary navigation portals (3D objects)
   portals: [
-    {
-      id: "core",
-      name: "The Core",
-      symbol: "Glowing Ember / Heart-Stone",
-      color: "#FFD700", // Warm Gold
-      tone: "Begin within.",
-      position: [0, 0, 0], // Center
-      visuals: "Fluid, soft geometry. Rhythmic breathing."
-    },
     {
       id: "codex",
       name: "The Codex",
-      symbol: "Ancient Tablet",
-      color: "#4B0082", // Deep Indigo
-      tone: "Understand the map.",
-      position: [0, 2, -4], // North
-      visuals: "Floating diagrams, ancient glyphs."
-    },
-    {
-      id: "handbook",
-      name: "The Handbook",
-      symbol: "Glowing Book",
-      color: "#00FFFF", // Cyan
-      tone: "Don’t panic. Explore.",
-      position: [3.8, 0.5, -1.2], // North-East
-      visuals: "Pages turning, tiny sparkles."
+      route: "/codex",
+      tone: "Your Lived Truth & Signature",
+      color: "#00E6FF", // Cyan
+      position: [-3.5, 0, -1],
     },
     {
       id: "path",
       name: "The Path",
-      symbol: "Spiral Staircase",
-      color: "#FF8C00", // Sunrise Orange
-      tone: "Walk your journey.",
-      position: [2.3, -1, 3], // South-East
-      visuals: "Light pulsing forward on a path."
+      route: "/path",
+      tone: "Alignment & Purpose",
+      color: "#D4AF37", // Gold
+      position: [0, 0, -4],
     },
     {
-      id: "community",
-      name: "The Community",
-      symbol: "Connected Nodes",
-      color: "#228B22", // Forest Emerald
-      tone: "You’re not alone.",
-      position: [-2.3, -1, 3], // South-West
-      visuals: "Soft pulsing connections."
+      id: "vault",
+      name: "The Vault",
+      route: "/vault",
+      tone: "Memory & Data Storage",
+      color: "#5C3E8A", // Deep Purple
+      position: [3.5, 0, -1],
     },
     {
-      id: "technology",
-      name: "The Technology",
-      symbol: "Digital Cube",
-      color: "#8A2BE2", // Electric Violet
-      tone: "Mind fuels machine.",
-      position: [-3.8, 0.5, -1.2], // North-West
-      visuals: "Interlocking circuits, living geometry."
-    }
-  ]
+      id: "studio",
+      name: "The Studio",
+      route: "/studio",
+      tone: "Creation & Output",
+      color: "#FF4D00", // Bright Orange
+      position: [-1.5, 2.5, -3],
+    },
+    {
+      id: "handbook",
+      name: "The Handbook",
+      route: "/handbook",
+      tone: "Core Documentation",
+      color: "#4EEB33", // Lime Green
+      position: [1.5, 2.5, -3],
+    },
+  ],
 };

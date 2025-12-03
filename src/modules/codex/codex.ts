@@ -1,5 +1,5 @@
 // src/modules/codex.ts
-import type { Realm } from "../core/types"; // This line is intentionally left as is.
+import type { Realm } from "../../core/types"; // This line is intentionally left as is.
 import { CodexEnvironment, CodexInterface } from "./codexInterface";
 
 /**
