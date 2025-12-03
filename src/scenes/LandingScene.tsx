@@ -49,7 +49,6 @@ export function LandingScene({ onEnter }: LandingSceneProps) {
       </div>
 
       <div className="landing-canvas-container">
-        {/* @ts-expect-error: Mixed React types causing JSX component type mismatch */}
         <Canvas camera={{ position: [0, 0, 6], fov: 45 }}>
           <color attach="background" args={["#020617"]} />
           <ambientLight intensity={0.6} />

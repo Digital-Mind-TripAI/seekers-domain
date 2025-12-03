@@ -4,8 +4,6 @@ import { handbookModule } from "../modules/handbook";
 import { codexRealm } from "../modules/codex/codex";
 import { nexusRealm } from "../modules/nexus";
 
-export const realms: Realm[] = [nexusRealm, codexRealm];
-
 export const modules: NexusModule[] = [
   handbookModule,
   // studioModule,
@@ -13,4 +11,9 @@ export const modules: NexusModule[] = [
   // profileModule,
   // questsModule,
   // communityModule,
+];
+
+export const realms: Realm[] = [
+  nexusRealm,
+  codexRealm,
 ];

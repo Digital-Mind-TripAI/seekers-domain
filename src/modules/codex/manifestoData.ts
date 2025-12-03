@@ -1,4 +1,4 @@
-// src/modules/manifestoData.ts
+// src/modules/codex/manifestoData.ts
 
 export interface ManifestoEntry {
   id: string;
@@ -12,7 +12,7 @@ export const manifestoData: ManifestoEntry[] = [
     id: "nature-human",
     title: "The Nature of Being Human",
     icon: "🌕",
-    content: `To be human is to move through life with four simultaneous forces: Mind, Emotion, Body, and Spirit. When we allow them to speak to one another, we begin to understand ourselves.`
+    content: `To be human is to move through life with four simultaneous forces: Mind (thought), Emotion (energy), Body (action), and Spirit (meaning). When we allow them to speak to one another, we begin to understand ourselves.`
   },
   {
     id: "pendulum",
@@ -24,7 +24,7 @@ export const manifestoData: ManifestoEntry[] = [
     id: "enlightenment",
     title: "Enlightenment is Illumination",
     icon: "🌑",
-    content: `Enlightenment is not a destination. It is the journey of becoming illuminated, truth by truth. Just a moment of seeing clearly. A lightbulb. A click.`
+    content: `Enlightenment is not a destination. It is the journey of becoming illuminated, truth by truth. Just a moment of seeing clearly. A lightbulb. A click. Not the final state, just the moment of seeing clearly.`
   },
   {
     id: "neon-void",
@@ -57,6 +57,12 @@ export const manifestoData: ManifestoEntry[] = [
     content: `Pain is not punishment. It is a signal drawing your attention to what needs to be understood. When you understand the signal, the pain completes its job.`
   },
   {
+    id: "discipline",
+    title: "Discipline Without Punishment",
+    icon: "🔥",
+    content: `Discipline is the structure that maximizes the return on your time, energy, and focus. It is not punishment. It is alignment.`
+  },
+  {
     id: "ai-role",
     title: "The Role of AI",
     icon: "🌌",
@@ -73,6 +79,12 @@ export const manifestoData: ManifestoEntry[] = [
     title: "The Seeker's Path",
     icon: "🧭",
     content: `A Seeker does not follow a teacher. A Seeker follows truth. You do not need a path. You illuminate your own.`
+  },
+  {
+    id: "center",
+    title: "The Center of Everything",
+    icon: "🌞",
+    content: `Truth illuminated becomes wisdom. When truth is illuminated, shame dissolves, fear softens, and the Seeker returns to Bliss.`
   },
   {
     id: "invitation",
