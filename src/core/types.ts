@@ -1,10 +1,12 @@
 // src/core/types.ts
+import type { ComponentType } from "react";
+
 export interface NexusModule {
   id: string;
   route: string;
   label: string;
-  Scene: React.ComponentType;
-  Panel: React.ComponentType;
+  Scene: ComponentType;
+  Panel: ComponentType;
   onEnter?: () => void;
   onExit?: () => void;
 }
@@ -13,6 +15,6 @@ export interface Realm {
   id: string;
   route: string;
   label: string;
-  Environment: React.ComponentType;
-  Interface: React.ComponentType;
+  Environment: ComponentType;
+  Interface: ComponentType;
 }
