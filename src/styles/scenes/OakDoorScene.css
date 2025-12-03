@@ -1,0 +1,50 @@
+/* FILE: src/styles/scenes/OakDoorScene.css
+   DESCRIPTION:
+     Layout + theming for the Oak Door scene canvas.
+*/
+
+.oak-door-root {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  background: radial-gradient(
+    circle at top,
+    var(--nx-bg-soft) 0,
+    var(--nx-bg) 40%,
+    #000000 100%
+  );
+  color: var(--nx-fg);
+  overflow: hidden;
+}
+
+.oak-door-canvas-container {
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+  position: relative;
+  box-shadow: var(--nx-surface-shadow);
+}
+
+/* Overlay layer (optional UI on top of canvas) */
+.oak-door-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* Optional “hint” text at bottom center */
+.oak-door-hint {
+  position: absolute;
+  bottom: 1.5rem;
+  width: 100%;
+  text-align: center;
+  font-size: 0.8rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(180, 224, 255, 0.55);
+}
+
+/* Make canvas show it's interactive */
+.oak-door-canvas-container canvas {
+  cursor: pointer;
+}

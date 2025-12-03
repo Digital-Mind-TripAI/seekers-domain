@@ -6,7 +6,14 @@ import { handbookModule } from "../modules/handbook";
 // import { profileModule } from "../modules/profile";
 // import { questsModule } from "../modules/quests";
 // import { communityModule } from "../modules/community";
+import type { Realm } from "./types";
+import { codexRealm } from "../modules/codex";
+import { nexusRealm } from "../modules/nexus"; // <--- Import this
 
+export const realms: Realm[] = [
+  nexusRealm, // <--- Add this first so it's the default home
+  codexRealm,
+];
 export const modules: NexusModule[] = [
   handbookModule,
 

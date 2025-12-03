@@ -1,0 +1,60 @@
+/* FILE: src/styles/theme.css
+   DESCRIPTION:
+     Global Nexus theme tokens using CSS variables.
+*/
+
+:root {
+  /* Core palette */
+  --nx-bg: #020208;
+  --nx-bg-soft: #050718;
+  --nx-bg-elevated: #0b0f1a;
+
+  --nx-fg: #f5f7ff;
+  --nx-fg-muted: #a6b0d4;
+
+  /* Accents */
+  --nx-accent-teal: #3fffe0;
+  --nx-accent-teal-soft: #26ffe6;
+  --nx-accent-gold: #ffb347;
+  --nx-accent-magenta: #ff66ff;
+
+  /* Danger / warn (for later UI states) */
+  --nx-warn: #ffc857;
+  --nx-error: #ff4b6a;
+
+  /* Surfaces */
+  --nx-surface-border: rgba(255, 255, 255, 0.06);
+  --nx-surface-shadow: 0 18px 40px rgba(0, 0, 0, 0.65);
+  --nx-surface-radius: 18px;
+
+  /* Glows */
+  --nx-glow-teal-soft: 0 0 28px rgba(63, 255, 224, 0.45);
+  --nx-glow-gold-soft: 0 0 22px rgba(255, 179, 71, 0.4);
+  --nx-glow-magenta-soft: 0 0 32px rgba(255, 102, 255, 0.5);
+
+  /* Typography */
+  --nx-font-sans: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "Inter", "Segoe UI", sans-serif;
+  --nx-font-mono: "JetBrains Mono", "Fira Code", Menlo, Monaco, monospace;
+
+  /* Spacing */
+  --nx-spacing-xs: 0.375rem;
+  --nx-spacing-sm: 0.75rem;
+  --nx-spacing-md: 1.125rem;
+  --nx-spacing-lg: 1.75rem;
+  --nx-spacing-xl: 2.5rem;
+
+  /* Easing */
+  --nx-ease-soft: cubic-bezier(0.25, 0.8, 0.25, 1);
+  --nx-ease-snappy: cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+/* Global body baseline */
+body {
+  margin: 0;
+  padding: 0;
+  background: radial-gradient(circle at top, #050718 0, #020208 40%, #000);
+  color: var(--nx-fg);
+  font-family: var(--nx-font-sans);
+  -webkit-font-smoothing: antialiased;
+}

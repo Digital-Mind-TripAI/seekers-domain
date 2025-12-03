@@ -1,0 +1,45 @@
+/* FILE: src/styles/layout/AppShell.css
+   DESCRIPTION:
+     High-level layout for the Domain chrome around scenes.
+*/
+
+.app-shell-root {
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  background: radial-gradient(
+    circle at top,
+    var(--nx-bg-soft) 0,
+    var(--nx-bg) 45%,
+    #000 100%
+  );
+  color: var(--nx-fg);
+}
+
+.app-shell-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--nx-spacing-sm) var(--nx-spacing-md);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(16px);
+  background: linear-gradient(
+    to right,
+    rgba(10, 14, 32, 0.95),
+    rgba(5, 7, 20, 0.95)
+  );
+}
+
+.app-shell-title {
+  font-size: 0.95rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--nx-fg-muted);
+}
+
+.app-shell-main {
+  position: relative;
+  min-height: 0;
+  min-width: 0;
+}
