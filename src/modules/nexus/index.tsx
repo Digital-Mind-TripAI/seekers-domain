@@ -1,12 +1,9 @@
-// src/modules/nexus/index.tsx
-import Scene from "./Scene";
-import Panel from "./Panel";
-import type { Realm } from "../../core/types";
+/* FILE: src/modules/nexus/index.tsx
+   DESCRIPTION:
+     Barrel exports for the Nexus module.
+     - Scene: 3D experience (currently the OakDoorScene)
+     - Panel: UI wrapper that could be used in the app shell
+*/
 
-export const nexusRealm: Realm = {
-  id: "nexus",
-  route: "/", // The root path - this is the Home Base
-  label: "The Nexus",
-  Environment: Scene,
-  Interface: Panel,
-};
+export { NexusScene as Scene } from "./Scene";
+export { NexusPanel as Panel } from "./Panel";
