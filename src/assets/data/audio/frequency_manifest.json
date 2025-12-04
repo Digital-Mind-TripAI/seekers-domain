@@ -1,0 +1,58 @@
+
+{
+  "radio_hyperverse": {
+    "stations": [
+      {
+        "station_id": "freq_momentum_01",
+        "label": "KINETIC DRIVE",
+        "target_attribute": "momentum",
+        "description": "High-velocity rhythms for creative output and coding.",
+        "bpm_range": [120, 140],
+        "visual_theme": "neon_pulse",
+        "tracks": [
+          {
+            "id": "track_4021",
+            "title": "Build Phase Alpha",
+            "file_path": "assets/audio/momentum/build_phase_alpha.mp3",
+            "duration": 245,
+            "is_locked": false
+          },
+          {
+            "id": "track_4022",
+            "title": "Compiler Run",
+            "file_path": "assets/audio/momentum/compiler_run.mp3",
+            "duration": 300,
+            "is_locked": true,
+            "unlock_condition": "reach_momentum_level_10"
+          }
+        ]
+      },
+      {
+        "station_id": "freq_resilience_01",
+        "label": "THE ARID ZONE",
+        "target_attribute": "resilience",
+        "description": "Minimalist soundscapes for endurance and silence protocols.",
+        "bpm_range": [0, 60],
+        "visual_theme": "desert_scorched",
+        "tracks": [
+          {
+            "id": "track_1004",
+            "title": "Wind Over Sand",
+            "file_path": "assets/audio/resilience/wind_sand.mp3",
+            "duration": 600,
+            "is_locked": false
+          }
+        ]
+      },
+      {
+        "station_id": "freq_focus_01",
+        "label": "DEEP SIGNAL",
+        "target_attribute": "focus",
+        "description": "Theta waves and structured static for deep work.",
+        "bpm_range": [40, 60],
+        "visual_theme": "blueprint_grid",
+        "tracks": []
+      }
+    ]
+  }
+}
