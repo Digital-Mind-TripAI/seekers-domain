@@ -12,7 +12,7 @@ export interface OakDoorExperienceProps {
 }
 
 // Adjust this path to match where your oak door texture actually is
-import oakDoorTextureUrl from "../assets/oak-door.png";
+import oakDoorTextureUrl from "../assets/oak-door-main.png";
 
 export const OakDoorExperience: React.FC<OakDoorExperienceProps> = ({
   onPortalComplete,
