@@ -14,7 +14,7 @@ import { CodexEnvironment, CodexInterface } from "./codexInterface";
  */
 export const codexRealm: Realm = {
   id: "codex",
-  route: "/handbook",
+  route: "/codex",
   label: "Seeker’s Codex",
   Environment: CodexEnvironment,
   Interface: CodexInterface,

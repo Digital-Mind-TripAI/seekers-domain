@@ -1,16 +1,6 @@
 // src/modules/nexus/index.tsx
 import Scene from "./Scene";
 import Panel, { NexusPanel } from "./Panel";
-import type { Realm } from "../../core/types";
 
-// NOTE: You will need to create ./Scene.tsx and ./Panel.tsx next.
-
-export const nexusRealm: Realm = {
-  id: "nexus",
-  route: "/", // The root path - this is the Home Base
-  label: "The Nexus Gateway",
-  Environment: Scene,
-  Interface: Panel,
-};
-
-export { NexusPanel };
+// Component exports stay in this barrel; the realm definition lives in realm.ts
+export { NexusPanel, Panel, Scene };

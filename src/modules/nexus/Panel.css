@@ -1,0 +1,115 @@
+.nexus-panel-root {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  font-family: var(--nx-font-sans, "Inter", system-ui, -apple-system, sans-serif);
+  color: #e6f6ff;
+}
+
+.nexus-stage {
+  text-align: center;
+  pointer-events: auto;
+  animation: nexus-fade-in 0.8s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.nexus-title {
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  margin: 0;
+  background: linear-gradient(180deg, #ffd48a, #f1a634);
+  -webkit-background-clip: text;
+  color: transparent;
+  text-shadow: 0 0 24px rgba(255, 212, 138, 0.35);
+}
+
+.nexus-subtitle {
+  letter-spacing: 0.3em;
+  font-size: 0.75rem;
+  color: rgba(82, 204, 255, 0.7);
+  text-transform: uppercase;
+}
+
+.nexus-primary-button {
+  margin-top: 0.5rem;
+  padding: 1rem 3rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 196, 117, 0.5);
+  background: rgba(255, 196, 117, 0.08);
+  color: #ffe9c7;
+  letter-spacing: 0.18em;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: transform 160ms var(--nx-ease-snappy, ease), border-color 240ms ease, background 240ms ease;
+}
+
+.nexus-primary-button:hover {
+  border-color: rgba(255, 196, 117, 0.9);
+  background: rgba(255, 196, 117, 0.16);
+  transform: translateY(-1px);
+}
+
+.nexus-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  width: min(720px, 100vw - 3rem);
+  margin-top: 0.5rem;
+}
+
+.nexus-card {
+  padding: 1.25rem;
+  border-radius: 14px;
+  border: 1px solid rgba(88, 113, 150, 0.6);
+  background: linear-gradient(145deg, rgba(9, 12, 24, 0.9), rgba(14, 20, 36, 0.7));
+  transition: transform 180ms var(--nx-ease-snappy, ease), border-color 220ms ease, box-shadow 220ms ease;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.nexus-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(63, 255, 224, 0.65);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+}
+
+.nexus-card-label {
+  font-size: 1.05rem;
+  color: #e8f7ff;
+  font-weight: 600;
+}
+
+.nexus-card-sub {
+  font-size: 0.8rem;
+  color: rgba(184, 208, 230, 0.8);
+}
+
+.nexus-entered-hint {
+  position: absolute;
+  bottom: 3rem;
+  width: 100%;
+  text-align: center;
+  font-size: 0.7rem;
+  letter-spacing: 0.22em;
+  color: rgba(148, 163, 184, 0.8);
+  pointer-events: auto;
+}
+
+@keyframes nexus-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
