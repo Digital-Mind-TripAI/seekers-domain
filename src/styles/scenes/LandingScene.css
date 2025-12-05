@@ -15,7 +15,7 @@
   overflow: hidden;
 }
 
-/* Debug banner at the top so we can see HTML even if Canvas fails */
+/* Debug banner at the top so we know the component mounted */
 .landing-debug-banner {
   font-size: 0.75rem;
   padding: 0.35rem 0.75rem;

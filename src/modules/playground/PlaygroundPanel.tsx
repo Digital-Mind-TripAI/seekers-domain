@@ -1,11 +1,19 @@
-// src/modules/playground/PlaygroundPanel.tsx
+// FILE: src/modules/playground/PlaygroundPanel.tsx
+// DESCRIPTION:
+//   Playground harness that renders the LandingScene so we can
+//   iterate on the oak door experience without touching the main shell yet.
 
-import { NexusPanel } from "../nexus";
+import { LandingScene } from "../../scenes/LandingScene";
 
 const PlaygroundPanel = () => {
+  const handleEnter = () => {
+    console.log("[Playground] Enter HyperVerse requested");
+    // Later: navigate from here into Nexus / Handbook / Corridor, etc.
+  };
+
   return (
     <div style={{ width: "100%", height: "100%" }}>
-      <NexusPanel />
+      <LandingScene onEnter={handleEnter} />
     </div>
   );
 };
