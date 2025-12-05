@@ -5,7 +5,7 @@ import { gatewayData } from "./gatewayData";
 // Note: You will need to define or import the 'useNavigator' hook
 // for the real app to handle navigation when a portal is clicked.
 
-export default function Panel() {
+export function NexusPanel() {
   const [stage, setStage] = useState<"veil" | "threshold" | "entered">("veil");
 
   const handleEnter = () => {
@@ -73,3 +73,5 @@ export default function Panel() {
     </div>
   );
 }
+
+export default NexusPanel;

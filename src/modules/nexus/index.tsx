@@ -1,6 +1,6 @@
 // src/modules/nexus/index.tsx
 import Scene from "./Scene";
-import Panel from "./Panel";
+import Panel, { NexusPanel } from "./Panel";
 import type { Realm } from "../../core/types";
 
 // NOTE: You will need to create ./Scene.tsx and ./Panel.tsx next.
@@ -12,3 +12,5 @@ export const nexusRealm: Realm = {
   Environment: Scene,
   Interface: Panel,
 };
+
+export { NexusPanel };
