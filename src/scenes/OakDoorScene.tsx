@@ -9,13 +9,16 @@ type Phase = "idle" | "activating" | "pullThrough" | "done";
 export interface OakDoorExperienceProps {
   /** Called when the pull-through finishes (navigate to Nexus/Handbook) */
   onPortalComplete?: () => void;
+  /** Called once the portal is fully charged and begins the pull-through */
+  onPortalReady?: () => void;
 }
 
 // Adjust this path to match where your oak door texture actually is
-import oakDoorTextureUrl from "../assets/oak-door-main.png";
+import oakDoorTextureUrl from "../assets/oak-door-main.jpg";
 
 export const OakDoorExperience: React.FC<OakDoorExperienceProps> = ({
   onPortalComplete,
+  onPortalReady,
 }) => {
   const [phase, setPhase] = useState<Phase>("idle");
   const activationProgress = useRef(0); // 0 → 1
@@ -78,6 +81,10 @@ export const OakDoorExperience: React.FC<OakDoorExperienceProps> = ({
       if (activationProgress.current >= 1) {
         setPhase("pullThrough");
         activationProgress.current = 0;
+
+        if (onPortalReady) {
+          onPortalReady();
+        }
 
         if (groupRef.current) {
           pullStart.current.copy(groupRef.current.position);

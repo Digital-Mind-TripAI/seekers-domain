@@ -1,0 +1,43 @@
+{
+  "id": "quest_004",
+  "order": 4,
+  "title": "The Hunger Audit",
+  "realm": "introspection",
+  "frequencyColor": "neon_blue",
+  "ethos": "Governance / Sovereignty",
+  "coreTruth": "You are confusing the Adult's Lust for the Child's Fear.",
+  "assets": {
+    "audioTrack": "Simply Be You",
+    "visualTheme": "wolf_child"
+  },
+  "phases": {
+    "signal": {
+      "type": "video",
+      "title": "The Wolf at the Door",
+      "duration": "60s",
+      "content": "A starving wolf dissolves into a cold child. Voiceover: 'Stop feeding the Wolf. Hold the Child.'"
+    },
+    "academy": {
+      "type": "audio_note",
+      "title": "The Anatomy of Want",
+      "instructor": "The Spirit Mechanic",
+      "content": "Tracey (Inner Child) signals 'Unsafe.' The Body translates it as 'Lust.' You aren't addicted to people; you are addicted to safety."
+    },
+    "guild": {
+      "type": "action_card",
+      "title": "The Hunger Audit",
+      "objective": "Distinguish between Horny and Lonely.",
+      "steps": [
+        "Pause on the urge.",
+        "Interview Tracey: 'Friction or Safety?'",
+        "The Self-Soothe: Blanket, Journal, Affirmation."
+      ]
+    },
+    "nexus": {
+      "type": "archive_scan",
+      "title": "Enlightenment Now: Page 61",
+      "context": "Founder's Journal (Jan 2005)",
+      "quote": "I didn't become cold. I became Whole. And a Whole person craves nothing, but enjoys everything."
+    }
+  }
+}

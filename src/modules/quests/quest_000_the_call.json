@@ -1,0 +1,43 @@
+{
+  "id": "quest_000",
+  "order": 0,
+  "title": "The Call",
+  "realm": "origin",
+  "frequencyColor": "neon_white",
+  "ethos": "Resonance / Sovereignty",
+  "coreTruth": "You didn't come here to fit in. You came here to build the place where you belong.",
+  "assets": {
+    "audioTrack": "Where Do I Belong",
+    "visualTheme": "void_spark"
+  },
+  "phases": {
+    "signal": {
+      "type": "video",
+      "title": "The Beacon",
+      "duration": "60s",
+      "content": "A single spark in the void finding another. Voiceover: 'What if you aren't lost? What if you are just early?'"
+    },
+    "academy": {
+      "type": "audio_note",
+      "title": "The Trailblazer's Paradox",
+      "instructor": "The Spirit Mechanic",
+      "content": "Isolation isn't a punishment; it's a quarantine. You are broadcasting on a frequency the old world can't receive yet."
+    },
+    "guild": {
+      "type": "action_card",
+      "title": "The Beacon Check",
+      "objective": "Stop seeking validation. Start signaling identity.",
+      "steps": [
+        "Stop explaining yourself for 24 hours.",
+        "Do one thing that is purely YOU.",
+        "Observe who leans in and who leans away."
+      ]
+    },
+    "nexus": {
+      "type": "archive_scan",
+      "title": "The Guide Book: Page 18",
+      "context": "Founder's Journal (2000)",
+      "quote": "I realized that if I was a Guide, my loneliness wasn't a defect—it was my job description."
+    }
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "id": "quest_001",
+  "order": 1,
+  "title": "The Switch",
+  "realm": "revelation",
+  "frequencyColor": "neon_cyan",
+  "ethos": "Resonance / Sovereignty",
+  "coreTruth": "You are the Pipe, not the Target.",
+  "assets": {
+    "audioTrack": "This Is Your Story",
+    "visualTheme": "stone_to_crystal"
+  },
+  "phases": {
+    "signal": {
+      "type": "video",
+      "title": "The Physics of Impact",
+      "duration": "60s",
+      "content": "Visual of stone shattering under lightning vs. crystal channeling it. 'Stop being the Target. Become the Pipeline.'"
+    },
+    "academy": {
+      "type": "audio_note",
+      "title": "Resistance vs. Flow",
+      "instructor": "The Spirit Mechanic",
+      "content": "Friction creates heat. Flow creates power. If you block the energy, you break. If you channel it, you shine."
+    },
+    "guild": {
+      "type": "action_card",
+      "title": "The Open Window",
+      "objective": "Visualize transparency during stress.",
+      "steps": [
+        "Catch the body bracing (tension).",
+        "Visualize your chest as clear glass.",
+        "Inhale the stress, exhale it out the back.",
+        "Mantra: 'I am the conduit.'"
+      ]
+    },
+    "nexus": {
+      "type": "archive_scan",
+      "title": "Book #6: The Server",
+      "context": "Founder's Journal (Oct 1999)",
+      "quote": "I realized I wasn't a trash can. I was a Server. My job wasn't to keep the data; it was to process it."
+    }
+  }
+}

@@ -2,8 +2,7 @@
 import type React from "react";
 import nexusRealm from "../modules/nexus";
 import codexRealm from "../modules/codex";
-import studioRealm from "../modules/studio";
-// add other realms here as they become "structural" parts of the navigation
+import annexRealm from "../modules/annex";
 
 export interface RealmModule {
   id: string;
@@ -17,5 +16,5 @@ export interface RealmModule {
 export const realmModules: RealmModule[] = [
   nexusRealm,
   codexRealm,
-  studioRealm,
+  annexRealm,
 ];

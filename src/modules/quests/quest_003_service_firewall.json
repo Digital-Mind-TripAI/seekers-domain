@@ -1,0 +1,43 @@
+{
+  "id": "quest_003",
+  "order": 3,
+  "title": "The Service Firewall",
+  "realm": "connection",
+  "frequencyColor": "neon_gold",
+  "ethos": "Sovereignty / Resonance",
+  "coreTruth": "Service is a Choice. Servitude is a Debt.",
+  "assets": {
+    "audioTrack": "Live Your Life",
+    "visualTheme": "golden_shield"
+  },
+  "phases": {
+    "signal": {
+      "type": "video",
+      "title": "The Mechanic",
+      "duration": "60s",
+      "content": "A mechanic working calmly while chaos hits an invisible shield. Voiceover: 'You can fix the engine without drinking the oil.'"
+    },
+    "academy": {
+      "type": "audio_note",
+      "title": "The Physics of Infection",
+      "instructor": "The Spirit Mechanic",
+      "content": "Empathy is feeling the vibe. Servitude is absorbing it. Compassion is seeing the pain but refusing the debt."
+    },
+    "guild": {
+      "type": "action_card",
+      "title": "The Return to Sender",
+      "objective": "Serve without absorbing disrespect.",
+      "steps": [
+        "Feel the hit (Tracey alerts).",
+        "Verbal Mirror: 'I cannot receive the info when delivered like that.'",
+        "The Mantra: Access is a privilege, not a right."
+      ]
+    },
+    "nexus": {
+      "type": "archive_scan",
+      "title": "Book #6: The Big Angel",
+      "context": "Founder's Journal (Jail Era)",
+      "quote": "I served men who were murderers... but I never let their darkness become my darkness. I kept the gate."
+    }
+  }
+}

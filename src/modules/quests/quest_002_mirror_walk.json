@@ -1,0 +1,44 @@
+{
+  "id": "quest_002",
+  "order": 2,
+  "title": "The Mirror Walk",
+  "realm": "introspection",
+  "frequencyColor": "neon_blue",
+  "ethos": "Self-Awareness / Integration",
+  "coreTruth": "Judgment is a Confession.",
+  "assets": {
+    "audioTrack": "Exposed Soul",
+    "visualTheme": "shattered_mirror"
+  },
+  "phases": {
+    "signal": {
+      "type": "video",
+      "title": "The Projector",
+      "duration": "45s",
+      "content": "A finger pointing at a shadow that reveals itself to be a mirror. 'Every judgment is a map to your own shadow.'"
+    },
+    "academy": {
+      "type": "audio_note",
+      "title": "The Ego's Defense",
+      "instructor": "The GameMaster",
+      "content": "The Ego quarantines traits it fears in itself by spotting them in others. You judge 'selfishness' because you are fighting your own need to take."
+    },
+    "guild": {
+      "type": "action_card",
+      "title": "The Walmart Watch",
+      "objective": "Trace judgment back to source.",
+      "steps": [
+        "Go to a public place.",
+        "Catch your first judgment of a stranger.",
+        "Ask: 'Where does this trait live in me?'",
+        "Reclaim the projection."
+      ]
+    },
+    "nexus": {
+      "type": "archive_scan",
+      "title": "Brain Dumps 2: Page 67",
+      "context": "Founder's Notes",
+      "quote": "You don't reveal God; you reveal Yourself. Removing the ego reveals the real You connected to all creation."
+    }
+  }
+}

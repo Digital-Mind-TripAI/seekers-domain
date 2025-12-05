@@ -1,4 +1,4 @@
-export function StudioPanel() {
+export function AnnexPanel() {
   return (
     <div>
       <h1 style={{ color: "#4effff", marginBottom: 12 }}>Creator Studio</h1>

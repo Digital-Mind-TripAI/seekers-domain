@@ -1,0 +1,44 @@
+{
+  "id": "quest_005",
+  "order": 5,
+  "title": "The Sensitivity Shift",
+  "realm": "mastery",
+  "frequencyColor": "neon_green",
+  "ethos": "Resonance / Governance",
+  "coreTruth": "Empathy is Data, not Burden.",
+  "assets": {
+    "audioTrack": "Empath Rising",
+    "visualTheme": "static_to_symphony"
+  },
+  "phases": {
+    "signal": {
+      "type": "video",
+      "title": "The Antenna",
+      "duration": "60s",
+      "content": "Turning jagged noise into flowing light. Voiceover: 'The pain isn't a malfunction. It is Data. Tune it up.'"
+    },
+    "academy": {
+      "type": "audio_note",
+      "title": "Physics of the Plug-In",
+      "instructor": "The Spirit Mechanic",
+      "content": "You download files when you make eye contact. You must learn to read the file without saving it to your hard drive."
+    },
+    "guild": {
+      "type": "action_card",
+      "title": "The Screen Wipe",
+      "objective": "Clear foreign data from your system.",
+      "steps": [
+        "ID Scan: 'Is this mine?'",
+        "Visual: White light bar scanning down.",
+        "Action: Push the data into the earth.",
+        "Reset: 'Return to sender.'"
+      ]
+    },
+    "nexus": {
+      "type": "archive_scan",
+      "title": "Book #4: The Server",
+      "context": "Founder's Journal (Oct 1999)",
+      "quote": "If you feel everything, it's because you were built to handle the bandwidth. You are the immune system of humanity."
+    }
+  }
+}
