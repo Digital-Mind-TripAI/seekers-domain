@@ -1,19 +1,21 @@
 // src/core/moduleRegistry.ts
-import type { NexusModule, Realm } from "./types";
-import { handbookModule } from "../modules/handbook";
-import { codexRealm } from "../modules/codex/codex";
-import { nexusRealm } from "../modules/nexus/realm";
+import type React from "react";
+import nexusRealm from "../modules/nexus";
+import codexRealm from "../modules/codex";
+import studioRealm from "../modules/studio";
+// add other realms here as they become "structural" parts of the navigation
 
-export const modules: NexusModule[] = [
-  handbookModule,
-  // studioModule,
-  // annexModule,
-  // profileModule,
-  // questsModule,
-  // communityModule,
-];
+export interface RealmModule {
+  id: string;
+  label: string;
+  route: string;
+  Panel: React.ComponentType;
+  Scene?: React.ComponentType;
+  navWeight?: number;
+}
 
-export const realms: Realm[] = [
+export const realmModules: RealmModule[] = [
   nexusRealm,
   codexRealm,
+  studioRealm,
 ];

@@ -1,6 +1,13 @@
 // src/modules/nexus/index.tsx
-import Scene from "./Scene";
-import Panel, { NexusPanel } from "./Panel";
+import type { RealmModule } from "../../core/moduleRegistry";
+import { NexusPanel } from "./Panel";
 
-// Component exports stay in this barrel; the realm definition lives in realm.ts
-export { NexusPanel, Panel, Scene };
+export const nexusRealm: RealmModule = {
+  id: "nexus",
+  label: "The Nexus",
+  route: "/nexus",
+  Panel: NexusPanel,
+};
+
+// Allow both named and default import styles
+export default nexusRealm;
