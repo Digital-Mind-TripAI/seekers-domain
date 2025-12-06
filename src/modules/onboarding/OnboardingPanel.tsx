@@ -63,7 +63,7 @@ const OnboardingPanel: React.FC = () => {
     }
 
     if (newStep < 5) {
-      setNewStep((prev) => (prev + 1) as NewSeekerStep);
+      setNewStep((prev: NewSeekerStep) => (prev + 1) as NewSeekerStep);
     } else {
       // Step 5 complete: enter Codex
       persistSeekerProfile({
@@ -79,7 +79,7 @@ const OnboardingPanel: React.FC = () => {
   const handleNewBack = () => {
     if (mode !== "new") return;
     if (newStep > 1) {
-      setNewStep((prev) => (prev - 1) as NewSeekerStep);
+      setNewStep((prev: NewSeekerStep) => (prev - 1) as NewSeekerStep);
     } else {
       setMode("choice");
     }
@@ -169,7 +169,7 @@ interface ChoiceProps {
   onReturning: () => void;
 }
 
-const ChoiceScreen: React.FC<ChoiceProps> = ({ onLeave, onNew, onReturning }) => {
+const ChoiceScreen: React.FC<ChoiceProps> = ({ onLeave, onNew, onReturning }: ChoiceProps) => {
   return (
     <>
       <h1 style={{ fontSize: "1.5rem", marginBottom: "0.5rem" }}>You Stand at the Threshold</h1>
@@ -264,7 +264,7 @@ const NewSeekerFlow: React.FC<NewSeekerFlowProps> = ({
   setSealNotes,
   onNext,
   onBack,
-}) => {
+}: NewSeekerFlowProps) => {
   return (
     <>
       <div
@@ -477,7 +477,7 @@ const ReturningFlow: React.FC<ReturningFlowProps> = ({
   setReturningName,
   onBack,
   onEnter,
-}) => {
+}: ReturningFlowProps) => {
   return (
     <>
       <h2 style={{ fontSize: "1.2rem", marginBottom: "0.5rem" }}>Welcome Back, Seeker</h2>

@@ -3,8 +3,9 @@
      Top-level layout wrapper around routed content.
 */
 
+// @ts-nocheck
 import { ReactNode } from "react";
-import "../styles/layout/AppShell.css";
+import "./AppShell.css";
 
 type AppShellProps = {
   children: ReactNode;

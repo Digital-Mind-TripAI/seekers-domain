@@ -1,248 +1,230 @@
-// src/scenes/OakDoorScene.tsx
 import React, { useRef, useState } from "react";
-import { Group, Mesh, Vector3, MeshStandardMaterial } from "three";
-import { useFrame } from "@react-three/fiber";
-import { Float, useTexture } from "@react-three/drei";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { Float, useTexture, Stars, OrbitControls, Sparkles } from "@react-three/drei";
+import { Group, Mesh, DoubleSide } from "three";
+import "../styles/scenes/OakDoorScene.css";
 
-type Phase = "idle" | "activating" | "pullThrough" | "done";
-
-export interface OakDoorExperienceProps {
-  /** Called when the pull-through finishes (navigate to Nexus/Handbook) */
-  onPortalComplete?: () => void;
-  /** Called once the portal is fully charged and begins the pull-through */
-  onPortalReady?: () => void;
-}
-
-// Adjust this path to match where your oak door texture actually is
+// Ensure this path matches your asset location
 import oakDoorTextureUrl from "../assets/oak-door-main.jpg";
 
-export const OakDoorExperience: React.FC<OakDoorExperienceProps> = ({
-  onPortalComplete,
-  onPortalReady,
-}) => {
-  const [phase, setPhase] = useState<Phase>("idle");
-  const activationProgress = useRef(0); // 0 → 1
-  const groupRef = useRef<Group | null>(null);
-  const doorRef = useRef<Mesh | null>(null);
-  const portalRef = useRef<Mesh | null>(null);
+// --- TYPES ---
+type Phase = "idle" | "activating" | "pullThrough" | "done";
 
+export interface OakDoorSceneProps {
+  onEnter?: () => void;
+}
+
+export interface OakDoorExperienceProps {
+  isPromised?: boolean;
+  onTriggerPromise?: () => void;
+  onPortalReady?: () => void;
+  onPortalComplete?: () => void;
+}
+
+// --- 3D COMPONENT: THE DOOR EXPERIENCE ---
+export const OakDoorExperience: React.FC<OakDoorExperienceProps> = ({
+  isPromised = true,
+  onTriggerPromise = () => {},
+  onPortalReady = () => {},
+  onPortalComplete = () => {},
+}: OakDoorExperienceProps) => {
+  const groupRef = useRef<Group>(null);
+  const doorRef = useRef<Mesh>(null);
+  const [phase, setPhase] = useState<Phase>("idle");
+  const activationProgress = useRef(0);
+  const portalReadyEmitted = useRef(false);
+
+  // Load texture
   const doorTexture = useTexture(oakDoorTextureUrl);
 
-  // For convenience, predefine some vectors
-  const pullStart = useRef(new Vector3(0, 0, 0));
-  const pullEnd = useRef(new Vector3(0, 0, -4)); // move scene toward camera to simulate pull
+  // The Interaction Logic
+  const handleDoorClick = () => {
+    if (phase !== "idle") return; // Ignore clicks if already animating
 
-  useFrame((_state, delta) => {
-    // Subtle idle animation
-    if (phase === "idle" && groupRef.current) {
-      groupRef.current.rotation.y =
-        Math.sin(_state.clock.getElapsedTime() * 0.2) * 0.03;
+    if (!isPromised) {
+      // 1. If not promised, trigger the UI Modal
+      if (onTriggerPromise) onTriggerPromise();
+    } else {
+      // 2. If promised, start the sequence
+      setPhase("activating");
+    }
+  };
+
+  useFrame((state: unknown, delta: number) => {
+    if (!groupRef.current) return;
+
+    // PHASE 1: IDLE (Breathing)
+    if (phase === "idle") {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const s = state as any;
+      groupRef.current.rotation.y = Math.sin(s.clock.elapsedTime * 0.3) * 0.05;
     }
 
+    // PHASE 2: ACTIVATING (The Wormhole Charge)
     if (phase === "activating") {
-      activationProgress.current = Math.min(
-        1,
-        activationProgress.current + delta / 2.0 // ~2s
-      );
-
-      const t = activationProgress.current;
-
-      // 0–0.4: door “charges” / cracks open feel
+      activationProgress.current += delta * 0.8;
+      
+      // Shake Effect
+      const shake = (1 - Math.min(activationProgress.current, 1)) * 0.05; 
+      groupRef.current.position.x = (Math.random() - 0.5) * shake;
+      
+      // Open the door
       if (doorRef.current) {
-        const door = doorRef.current;
-        const crackPhase = Math.min(1, t / 0.4);
-
-        const scaleX = 1 + crackPhase * 0.05;
-        const scaleY = 1 + crackPhase * 0.02;
-        door.scale.set(scaleX, scaleY, 1);
-
-        door.rotation.y = (1 - crackPhase) * 0.05;
-
-        const mat = door.material as MeshStandardMaterial;
-        mat.emissiveIntensity = 0.2 + crackPhase * 0.8;
+        // Rotate open to 90 degrees (PI/2)
+        doorRef.current.rotation.y = THREE.MathUtils.lerp(doorRef.current.rotation.y, -Math.PI / 2, delta * 2);
       }
 
-      // 0.2–1: portal forms behind the door
-      if (portalRef.current) {
-        const portal = portalRef.current;
-        const portalPhase = Math.max(0, (t - 0.2) / 0.8); // delayed start
-        const eased = easeInOut(portalPhase);
-
-        const scale = 0.1 + eased * 1.3;
-        portal.scale.set(scale, scale, scale);
-
-        const mat = portal.material as MeshStandardMaterial;
-        mat.emissiveIntensity = 0.2 + eased * 1.5;
-
-        // Spin for wormhole feel
-        portal.rotation.z += delta * (0.8 + eased);
-      }
-
+      // Transition to Pull Through
       if (activationProgress.current >= 1) {
-        setPhase("pullThrough");
         activationProgress.current = 0;
-
-        if (onPortalReady) {
-          onPortalReady();
-        }
-
-        if (groupRef.current) {
-          pullStart.current.copy(groupRef.current.position);
-        }
+        portalReadyEmitted.current = false;
+        setPhase("pullThrough");
       }
     }
 
-    if (phase === "pullThrough" && groupRef.current) {
-      activationProgress.current = Math.min(
-        1,
-        activationProgress.current + delta / 1.2 // ~1.2s
-      );
+    // PHASE 3: PULL THROUGH (Fly In)
+    if (phase === "pullThrough") {
+      if (!portalReadyEmitted.current) {
+        portalReadyEmitted.current = true;
+        if (onPortalReady) onPortalReady();
+      }
 
-      const t = easeInOut(activationProgress.current);
-      const group = groupRef.current;
-
-      // Move the whole world forward, like you’re being pulled in
-      group.position.lerpVectors(pullStart.current, pullEnd.current, t);
-      group.rotation.y += delta * 0.8; // tunnel spin
-
-      if (activationProgress.current >= 1) {
+      // Move camera forward into the void
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const s = state as any;
+      s.camera.position.z -= delta * 12; 
+      
+      // Trigger completion when we pass the threshold
+      if (s.camera.position.z < -5) {
+        onPortalComplete();
         setPhase("done");
-        if (onPortalComplete) onPortalComplete();
       }
     }
   });
 
-  const handleDoorClick = () => {
-    if (phase === "idle") {
-      activationProgress.current = 0;
-      setPhase("activating");
-      // TODO: hook a chime / portal sound here later
-    }
-  };
-
   return (
-    <group ref={groupRef} position={[0, 0, -6]}>
-      <Corridor />
-
-      {/* Door + subtle halo */}
-      <group>
-        <Float
-          speed={phase === "idle" ? 0.6 : 1.2}
-          rotationIntensity={phase === "idle" ? 0.1 : 0.3}
-          floatIntensity={phase === "idle" ? 0.15 : 0.4}
+    <group ref={groupRef}>
+      <Float speed={2} rotationIntensity={0.2} floatIntensity={0.5}>
+        {/* THE DOOR MESH */}
+        <mesh 
+          ref={doorRef}
+          position={[0, 0, 0]} 
+          onClick={handleDoorClick}
+          onPointerOver={() => document.body.style.cursor = 'pointer'}
+          onPointerOut={() => document.body.style.cursor = 'auto'}
         >
-          <mesh
-            ref={doorRef}
-            position={[0, 1.4, 0]}
-            onClick={handleDoorClick}
-            castShadow
-          >
-            <planeGeometry args={[2.4, 4.0]} />
-            <meshStandardMaterial
-              map={doorTexture}
-              metalness={0.1}
-              roughness={0.6}
-              emissive={"#3ce0ff"}
-              emissiveIntensity={phase === "idle" ? 0.15 : 0.4}
-            />
-          </mesh>
+          {/* Using your box geometry for the door slab */}
+          <boxGeometry args={[3, 5, 0.2]} />
+          <meshStandardMaterial 
+            map={doorTexture} 
+            color={phase === "idle" ? "white" : "#bbf7d0"} // Tints green when active
+            emissive={phase === "activating" ? "#4eff4e" : "#000000"}
+            emissiveIntensity={phase === "activating" ? 0.6 : 0}
+          />
+        </mesh>
 
-          {/* Soft glowing frame behind door */}
-          <mesh position={[0, 1.4, -0.05]}>
-            <planeGeometry args={[2.6, 4.2]} />
-            <meshBasicMaterial color="#00f0ff" transparent opacity={0.08} />
-          </mesh>
-        </Float>
-      </group>
-
-      {/* Portal torus behind the door */}
-      <mesh ref={portalRef} position={[0, 1.4, -0.2]}>
-        <torusGeometry args={[1.1, 0.08, 32, 64]} />
-        <meshStandardMaterial
-          color="#33ccff"
-          emissive="#33ccff"
-          emissiveIntensity={0.0}
-          metalness={0.3}
-          roughness={0.4}
-        />
-      </mesh>
-
-      {/* Ground */}
-      <mesh
-        receiveShadow
-        rotation={[-Math.PI / 2, 0, 0]}
-        position={[0, -0.01, 0]}
-      >
-        <planeGeometry args={[20, 20]} />
-        <meshStandardMaterial color="#050509" roughness={0.9} metalness={0.1} />
-      </mesh>
-
-      {/* Lights */}
-      <hemisphereLight
-        intensity={0.4}
-        groundColor="#010101"
-        color="#334455"
+        {/* THE PORTAL FRAME (Glowing Rim) */}
+        <mesh position={[0, 0, -0.15]}>
+          <planeGeometry args={[3.4, 5.4]} />
+          <meshBasicMaterial color="#bf9b30" transparent opacity={0.4} side={DoubleSide} />
+        </mesh>
+      </Float>
+      
+      {/* Dynamic Lighting */}
+      <pointLight 
+        position={[0, 2, 4]} 
+        intensity={phase === "activating" ? 3 : 1} 
+        color={phase === "activating" ? "#4eff4e" : "#ffd700"} 
+        distance={15} 
       />
-      <spotLight
-        position={[0, 6, 4]}
-        angle={0.6}
-        penumbra={0.5}
-        intensity={1.4}
-        castShadow
-        color="#ffffff"
-      />
-      <pointLight
-        position={[0, 1.4, 0.5]}
-        intensity={phase === "idle" ? 0.6 : 1.2}
-        distance={7}
-        color="#33ddff"
-      />
+      
+      {/* Background Particles (The Hyperverse awaiting) */}
+      <Sparkles count={100} scale={10} size={4} speed={0.4} opacity={0.5} color="#4eff4e" />
     </group>
   );
 };
 
+// --- 3D COMPONENT: THE CORRIDOR (Context) ---
 const Corridor: React.FC = () => {
   return (
     <group>
-      {/* Left wall */}
-      <mesh
-        position={[-3, 1.5, 0]}
-        rotation={[0, Math.PI / 2, 0]}
-        receiveShadow
-      >
-        <planeGeometry args={[10, 5]} />
-        <meshStandardMaterial color="#050912" roughness={0.9} metalness={0.2} />
-      </mesh>
-
-      {/* Right wall */}
-      <mesh
-        position={[3, 1.5, 0]}
-        rotation={[0, -Math.PI / 2, 0]}
-        receiveShadow
-      >
-        <planeGeometry args={[10, 5]} />
-        <meshStandardMaterial color="#050912" roughness={0.9} metalness={0.2} />
-      </mesh>
-
-      {/* Ceiling */}
-      <mesh
-        position={[0, 3, 0]}
-        rotation={[Math.PI / 2, 0, 0]}
-        receiveShadow
-      >
-        <planeGeometry args={[6, 10]} />
-        <meshStandardMaterial color="#02040a" roughness={0.8} metalness={0.2} />
-      </mesh>
-
-      {/* Back wall behind door */}
-      <mesh position={[0, 1.5, -0.6]} receiveShadow>
-        <planeGeometry args={[6, 5]} />
-        <meshStandardMaterial color="#03040a" roughness={0.9} metalness={0.2} />
+      {/* Floor Reflection */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -3, 0]}>
+        <planeGeometry args={[20, 40]} />
+        <meshStandardMaterial color="#020617" roughness={0.1} metalness={0.8} />
       </mesh>
     </group>
   );
 };
 
-function easeInOut(t: number): number {
-  return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+// --- UI COMPONENT: THE PINKY PROMISE ---
+const PinkyPromiseModal = ({ onLock, onCancel }: { onLock: () => void, onCancel: () => void }) => (
+  <div className="modal-overlay">
+    <div className="promise-card">
+      <div className="nexus-glyph-header">❖</div>
+      <h2>THE VENDOR'S VOW</h2>
+      <p className="manifesto-text">
+        "We don't do lawyers here. We do Honor.<br/><br/>
+        By locking pinkies, you are making a promise to the Community, 
+        to The Truth, and—most importantly—to the kid inside yourself."
+      </p>
+      <ul className="promise-list">
+        <li><strong>1. Be Real</strong> (No fake scarcity, no fear tactics).</li>
+        <li><strong>2. Be Useful</strong> (Sell tools, not snake oil).</li>
+        <li><strong>3. Be Kind</strong> (Treat every Seeker like a friend).</li>
+      </ul>
+      <p className="disclaimer">
+        If you break this promise, we won't sue you. 
+        We'll just be really disappointed, and we'll have to lock the door.
+      </p>
+      <div className="button-row">
+        <button className="cancel-btn" onClick={onCancel}>Not Yet</button>
+        <button className="pinky-btn" onClick={onLock}>LOCK PINKIES 🤝</button>
+      </div>
+    </div>
+  </div>
+);
+
+// --- MAIN SCENE EXPORT ---
+export function OakDoorScene({ onEnter }: OakDoorSceneProps) {
+  const [showModal, setShowModal] = useState(false);
+  const [isPromised, setIsPromised] = useState(false);
+
+  const handleLock = () => {
+    setIsPromised(true);
+    setShowModal(false);
+    // The user will click the door again (or auto-trigger) to enter.
+    // For better UX, the door logic inside OakDoorExperience handles the "next click" behavior.
+  };
+
+  return (
+    <div className="oak-door-root" style={{ width: "100vw", height: "100vh", background: "#000" }}>
+      
+      <Canvas camera={{ position: [0, 0, 8], fov: 60 }} shadows>
+        <color attach="background" args={['#020617']} />
+        <fog attach="fog" args={['#020617', 5, 25]} />
+        
+        <ambientLight intensity={0.3} />
+        <Stars radius={100} depth={50} count={7000} factor={4} saturation={0} fade speed={1} />
+        
+        <OakDoorExperience 
+          isPromised={isPromised}
+          onTriggerPromise={() => setShowModal(true)}
+          onPortalComplete={() => onEnter && onEnter()}
+        />
+        
+        <Corridor />
+        
+        <OrbitControls enableZoom={false} enablePan={false} maxPolarAngle={Math.PI/2} minPolarAngle={Math.PI/2} />
+      </Canvas>
+
+      {showModal && (
+        <PinkyPromiseModal onLock={handleLock} onCancel={() => setShowModal(false)} />
+      )}
+      
+    </div>
+  );
 }
+
+// Helper for Three.js math
+import * as THREE from "three";
