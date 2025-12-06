@@ -1,230 +1,251 @@
-import React, { useRef, useState } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { Float, useTexture, Stars, OrbitControls, Sparkles } from "@react-three/drei";
-import { Group, Mesh, DoubleSide } from "three";
+// src/scenes/OakDoorScene.tsx
+
+import React, { useRef, useState, useEffect } from "react";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { useTexture, Stars, Sparkles, Html } from "@react-three/drei";
+import { Group, Mesh, DoubleSide, MeshStandardMaterial } from "three";
+import { useSpring, a } from "@react-spring/three";
+import * as THREE from "three";
 import "../styles/scenes/OakDoorScene.css";
 
 // Ensure this path matches your asset location
 import oakDoorTextureUrl from "../assets/oak-door-main.jpg";
 
+// --- CONSTANTS ---
+const INITIAL_CAMERA_POSITION = new THREE.Vector3(0, 1.3, 8);
+
+// --- DUMMY COMPONENTS ---
+const PinkyPromiseModal: React.FC<{ onLock: () => void; onCancel: () => void }> = ({ onLock, onCancel }) => (
+  <div
+    style={{
+      position: "absolute",
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
+      zIndex: 1000,
+      padding: "30px",
+      background: "rgba(50, 0, 70, 0.95)",
+      borderRadius: "10px",
+      color: "white",
+      textAlign: "center",
+      border: "2px solid hotpink",
+      boxShadow: "0 0 20px hotpink",
+      fontFamily: "Cinzel, serif",
+    }}
+  >
+    <h2>THE SEEKER'S VOW</h2>
+    <p style={{ margin: "20px 0" }}>Do you promise to proceed with courage and curiosity?</p>
+    <button
+      onClick={onLock}
+      style={{
+        padding: "10px 20px",
+        margin: "5px",
+        background: "hotpink",
+        border: "none",
+        color: "black",
+        fontWeight: "bold",
+      }}
+    >
+      LOCK PINKIES
+    </button>
+    <button
+      onClick={onCancel}
+      style={{ padding: "10px 20px", margin: "5px", background: "transparent", border: "1px solid white", color: "white" }}
+    >
+      CANCEL
+    </button>
+  </div>
+);
+
+const Corridor = () => (
+  <mesh position={[0, 0, -50]} rotation={[0, 0, 0]}>
+    <cylinderGeometry args={[5, 5, 100, 32]} />
+    <meshStandardMaterial color="#1a0f35" side={DoubleSide} />
+  </mesh>
+);
+
 // --- TYPES ---
 type Phase = "idle" | "activating" | "pullThrough" | "done";
 
 export interface OakDoorSceneProps {
-  onEnter?: () => void;
+  onOpenComplete?: () => void;
 }
 
 export interface OakDoorExperienceProps {
   isPromised?: boolean;
+  autoStart?: boolean;
   onTriggerPromise?: () => void;
   onPortalReady?: () => void;
   onPortalComplete?: () => void;
 }
 
+const CameraReset: React.FC = () => {
+  const { camera } = useThree();
+  useEffect(() => {
+    camera.position.copy(INITIAL_CAMERA_POSITION);
+    camera.lookAt(0, 1, -2);
+  }, [camera]);
+  return null;
+};
+
 // --- 3D COMPONENT: THE DOOR EXPERIENCE ---
 export const OakDoorExperience: React.FC<OakDoorExperienceProps> = ({
   isPromised = true,
+  autoStart = false,
   onTriggerPromise = () => {},
   onPortalReady = () => {},
   onPortalComplete = () => {},
 }: OakDoorExperienceProps) => {
   const groupRef = useRef<Group>(null);
   const doorRef = useRef<Mesh>(null);
+  const portalMaterialRef = useRef<MeshStandardMaterial>(null);
+
   const [phase, setPhase] = useState<Phase>("idle");
   const activationProgress = useRef(0);
   const portalReadyEmitted = useRef(false);
+  const pullThroughComplete = useRef(false);
 
-  // Load texture
   const doorTexture = useTexture(oakDoorTextureUrl);
+  const pullThroughTarget = useRef(new THREE.Vector3(0, 1.3, -10));
 
-  // The Interaction Logic
-  const handleDoorClick = () => {
-    if (phase !== "idle") return; // Ignore clicks if already animating
+  const { rotationY, positionZ } = useSpring({
+    rotationY: phase === "pullThrough" ? Math.PI * 0.7 : 0,
+    positionZ: phase === "pullThrough" ? -1.5 : 0,
+    config: { mass: 1, tension: 50, friction: 10, clamp: true },
+  });
 
-    if (!isPromised) {
-      // 1. If not promised, trigger the UI Modal
-      if (onTriggerPromise) onTriggerPromise();
-    } else {
-      // 2. If promised, start the sequence
+  // --- LOGIC 1: AUTO-START ---
+  useEffect(() => {
+    if (autoStart && phase === "idle") {
       setPhase("activating");
+    }
+  }, [autoStart, phase]);
+
+  // --- LOGIC 2: Manual Click ---
+  const handleDoorClick = () => {
+    if (phase === "idle") {
+      if (!isPromised) {
+        onTriggerPromise();
+        return;
+      }
+      setPhase("activating");
+    }
+
+    if (phase === "activating" && portalReadyEmitted.current) {
+      setPhase("pullThrough");
     }
   };
 
-  useFrame((state: unknown, delta: number) => {
-    if (!groupRef.current) return;
-
-    // PHASE 1: IDLE (Breathing)
-    if (phase === "idle") {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const s = state as any;
-      groupRef.current.rotation.y = Math.sin(s.clock.elapsedTime * 0.3) * 0.05;
-    }
-
-    // PHASE 2: ACTIVATING (The Wormhole Charge)
+  // --- LOGIC 3: Frame Loop ---
+  useFrame((state, delta) => {
     if (phase === "activating") {
-      activationProgress.current += delta * 0.8;
-      
-      // Shake Effect
-      const shake = (1 - Math.min(activationProgress.current, 1)) * 0.05; 
-      groupRef.current.position.x = (Math.random() - 0.5) * shake;
-      
-      // Open the door
-      if (doorRef.current) {
-        // Rotate open to 90 degrees (PI/2)
-        doorRef.current.rotation.y = THREE.MathUtils.lerp(doorRef.current.rotation.y, -Math.PI / 2, delta * 2);
+      activationProgress.current += delta;
+
+      const normalized = Math.min(activationProgress.current / 2.5, 1);
+      if (portalMaterialRef.current) {
+        portalMaterialRef.current.emissiveIntensity = 0.6 + normalized * 2.4;
+        portalMaterialRef.current.emissive.set("#8b5cf6");
+        portalMaterialRef.current.color.set("#2a134d");
       }
 
-      // Transition to Pull Through
-      if (activationProgress.current >= 1) {
-        activationProgress.current = 0;
-        portalReadyEmitted.current = false;
+      if (activationProgress.current > 1 && !portalReadyEmitted.current) {
+        portalReadyEmitted.current = true;
+        onPortalReady();
+      }
+
+      if (activationProgress.current > 3) {
         setPhase("pullThrough");
       }
     }
 
-    // PHASE 3: PULL THROUGH (Fly In)
     if (phase === "pullThrough") {
-      if (!portalReadyEmitted.current) {
-        portalReadyEmitted.current = true;
-        if (onPortalReady) onPortalReady();
-      }
+      const cam = state.camera;
+      cam.position.lerp(pullThroughTarget.current, 0.02);
+      cam.lookAt(0, 1, -20);
 
-      // Move camera forward into the void
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const s = state as any;
-      s.camera.position.z -= delta * 12; 
-      
-      // Trigger completion when we pass the threshold
-      if (s.camera.position.z < -5) {
-        onPortalComplete();
+      if (!pullThroughComplete.current && cam.position.z <= pullThroughTarget.current.z + 0.2) {
+        pullThroughComplete.current = true;
         setPhase("done");
+        onPortalComplete();
       }
     }
   });
 
   return (
-    <group ref={groupRef}>
-      <Float speed={2} rotationIntensity={0.2} floatIntensity={0.5}>
-        {/* THE DOOR MESH */}
-        <mesh 
-          ref={doorRef}
-          position={[0, 0, 0]} 
-          onClick={handleDoorClick}
-          onPointerOver={() => document.body.style.cursor = 'pointer'}
-          onPointerOut={() => document.body.style.cursor = 'auto'}
+    <>
+      <CameraReset />
+      <ambientLight intensity={0.15} />
+      <pointLight position={[2, 3, 3]} intensity={3} color="#b9c7ff" />
+      <Stars radius={60} depth={30} count={8000} factor={3} saturation={0} fade speed={0.3} />
+      <Sparkles count={35} speed={0.5} opacity={0.8} scale={[12, 8, 12]} color="#76e4ff" />
+
+      <group ref={groupRef} position={[0, -0.2, 0]}>
+        <a.group ref={doorRef} position-z={positionZ} rotation-y={rotationY} onClick={handleDoorClick}>
+          <mesh castShadow receiveShadow>
+            <boxGeometry args={[2.6, 4.4, 0.25]} />
+            <meshStandardMaterial map={doorTexture} roughness={0.8} metalness={0.2} />
+          </mesh>
+
+          <mesh position={[0, 0, -0.14]} receiveShadow>
+            <planeGeometry args={[2.4, 4.2]} />
+            <meshStandardMaterial
+              ref={portalMaterialRef}
+              color="#24113e"
+              emissive="#5f3bc4"
+              emissiveIntensity={0.4}
+              side={DoubleSide}
+              transparent
+              opacity={0.95}
+            />
+          </mesh>
+        </a.group>
+      </group>
+
+      <Corridor />
+      <Html position={[0, -2, 2]} center>
+        <div className="oak-door-hint">CLICK THE DOOR TO ENTER</div>
+      </Html>
+    </>
+  );
+};
+
+// --- FULL SCENE WRAPPER ---
+// Provides the canvas + optional promise modal wrapper for the door experience
+export const OakDoorScene: React.FC<OakDoorSceneProps> = ({ onOpenComplete }) => {
+  const [needsPromise, setNeedsPromise] = useState(false);
+  const [sceneKey, setSceneKey] = useState(0);
+
+  return (
+    <div className="oak-door-root">
+      <div className="oak-door-canvas-container">
+        <Canvas
+          shadows
+          dpr={[1, 1.5]}
+          camera={{ position: [INITIAL_CAMERA_POSITION.x, INITIAL_CAMERA_POSITION.y, INITIAL_CAMERA_POSITION.z], fov: 50 }}
         >
-          {/* Using your box geometry for the door slab */}
-          <boxGeometry args={[3, 5, 0.2]} />
-          <meshStandardMaterial 
-            map={doorTexture} 
-            color={phase === "idle" ? "white" : "#bbf7d0"} // Tints green when active
-            emissive={phase === "activating" ? "#4eff4e" : "#000000"}
-            emissiveIntensity={phase === "activating" ? 0.6 : 0}
+          <color attach="background" args={["#050211"]} />
+          <OakDoorExperience
+            key={sceneKey}
+            isPromised={!needsPromise}
+            autoStart
+            onTriggerPromise={() => setNeedsPromise(true)}
+            onPortalReady={() => {}}
+            onPortalComplete={() => {
+              onOpenComplete?.();
+            }}
           />
-        </mesh>
-
-        {/* THE PORTAL FRAME (Glowing Rim) */}
-        <mesh position={[0, 0, -0.15]}>
-          <planeGeometry args={[3.4, 5.4]} />
-          <meshBasicMaterial color="#bf9b30" transparent opacity={0.4} side={DoubleSide} />
-        </mesh>
-      </Float>
-      
-      {/* Dynamic Lighting */}
-      <pointLight 
-        position={[0, 2, 4]} 
-        intensity={phase === "activating" ? 3 : 1} 
-        color={phase === "activating" ? "#4eff4e" : "#ffd700"} 
-        distance={15} 
-      />
-      
-      {/* Background Particles (The Hyperverse awaiting) */}
-      <Sparkles count={100} scale={10} size={4} speed={0.4} opacity={0.5} color="#4eff4e" />
-    </group>
-  );
-};
-
-// --- 3D COMPONENT: THE CORRIDOR (Context) ---
-const Corridor: React.FC = () => {
-  return (
-    <group>
-      {/* Floor Reflection */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -3, 0]}>
-        <planeGeometry args={[20, 40]} />
-        <meshStandardMaterial color="#020617" roughness={0.1} metalness={0.8} />
-      </mesh>
-    </group>
-  );
-};
-
-// --- UI COMPONENT: THE PINKY PROMISE ---
-const PinkyPromiseModal = ({ onLock, onCancel }: { onLock: () => void, onCancel: () => void }) => (
-  <div className="modal-overlay">
-    <div className="promise-card">
-      <div className="nexus-glyph-header">❖</div>
-      <h2>THE VENDOR'S VOW</h2>
-      <p className="manifesto-text">
-        "We don't do lawyers here. We do Honor.<br/><br/>
-        By locking pinkies, you are making a promise to the Community, 
-        to The Truth, and—most importantly—to the kid inside yourself."
-      </p>
-      <ul className="promise-list">
-        <li><strong>1. Be Real</strong> (No fake scarcity, no fear tactics).</li>
-        <li><strong>2. Be Useful</strong> (Sell tools, not snake oil).</li>
-        <li><strong>3. Be Kind</strong> (Treat every Seeker like a friend).</li>
-      </ul>
-      <p className="disclaimer">
-        If you break this promise, we won't sue you. 
-        We'll just be really disappointed, and we'll have to lock the door.
-      </p>
-      <div className="button-row">
-        <button className="cancel-btn" onClick={onCancel}>Not Yet</button>
-        <button className="pinky-btn" onClick={onLock}>LOCK PINKIES 🤝</button>
+        </Canvas>
       </div>
-    </div>
-  </div>
-);
 
-// --- MAIN SCENE EXPORT ---
-export function OakDoorScene({ onEnter }: OakDoorSceneProps) {
-  const [showModal, setShowModal] = useState(false);
-  const [isPromised, setIsPromised] = useState(false);
-
-  const handleLock = () => {
-    setIsPromised(true);
-    setShowModal(false);
-    // The user will click the door again (or auto-trigger) to enter.
-    // For better UX, the door logic inside OakDoorExperience handles the "next click" behavior.
-  };
-
-  return (
-    <div className="oak-door-root" style={{ width: "100vw", height: "100vh", background: "#000" }}>
-      
-      <Canvas camera={{ position: [0, 0, 8], fov: 60 }} shadows>
-        <color attach="background" args={['#020617']} />
-        <fog attach="fog" args={['#020617', 5, 25]} />
-        
-        <ambientLight intensity={0.3} />
-        <Stars radius={100} depth={50} count={7000} factor={4} saturation={0} fade speed={1} />
-        
-        <OakDoorExperience 
-          isPromised={isPromised}
-          onTriggerPromise={() => setShowModal(true)}
-          onPortalComplete={() => onEnter && onEnter()}
+      {needsPromise && (
+        <PinkyPromiseModal
+          onLock={() => {
+            setNeedsPromise(false);
+            setSceneKey((k) => k + 1);
+          }}
+          onCancel={() => setNeedsPromise(false)}
         />
-        
-        <Corridor />
-        
-        <OrbitControls enableZoom={false} enablePan={false} maxPolarAngle={Math.PI/2} minPolarAngle={Math.PI/2} />
-      </Canvas>
-
-      {showModal && (
-        <PinkyPromiseModal onLock={handleLock} onCancel={() => setShowModal(false)} />
       )}
-      
     </div>
   );
-}
-
-// Helper for Three.js math
-import * as THREE from "three";
+};

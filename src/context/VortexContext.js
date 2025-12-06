@@ -6,20 +6,24 @@ const VortexContext = createContext();
 
 export const VortexProvider = ({ children }) => {
   const [currentComet, setCurrentComet] = useState(null); 
-  const [vortexState, setVortexState] = useState('browsing'); 
+  
+  // 1. CHANGE DEFAULT STATE: Start at the 'entry' (The Oak Door)
+  const [vortexState, setVortexState] = useState('entry'); 
 
-  // 1. ENGAGE: Starts the process
+  // 2. NEW FUNCTION: Call this when the Oak Door animation finishes
+  const enterTheGuild = () => {
+    setVortexState('browsing');
+    console.log("🚪 The Oak Door is open. Welcome to the Codex.");
+  };
+
   const engageTether = (comet) => {
     setCurrentComet(comet);
-    setVortexState('warping'); // This triggers the <WarpDriveAnimation /> to render
+    setVortexState('warping'); 
     console.log(`🚀 Warp engines engaged for: ${comet.name}`);
-    
-    // REMOVED: The setTimeout is gone. We wait for the video now.
   };
   
-  // 2. COMPLETE: Called by the video when it finishes
   const completeWarp = () => {
-    setVortexState('arrived'); // This triggers <CometHabitat />
+    setVortexState('arrived'); 
     console.log("✅ Warp complete. Arrived at destination.");
   };
 
@@ -32,8 +36,9 @@ export const VortexProvider = ({ children }) => {
     <VortexContext.Provider value={{ 
       currentComet, 
       vortexState, 
+      enterTheGuild, // Export the new function
       engageTether, 
-      completeWarp, // Export this so the video player can use it
+      completeWarp, 
       returnToAtlas 
     }}>
       {children}
