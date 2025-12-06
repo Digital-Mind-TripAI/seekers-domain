@@ -25,8 +25,11 @@ export default function App() {
             <Route path="/codex" element={<CodexInterface />} />
             <Route path="/annex" element={<AnnexPanel />} />
 
-            {/* Optional legacy alias */}
+            {/* Legacy alias for old links */}
             <Route path="/handbook" element={<CodexInterface />} />
+
+            {/* 🚧 Catch-all: any unknown path (like /playground) → Landing */}
+            <Route path="*" element={<LandingPanel />} />
           </Routes>
         </AppShell>
       </HashRouter>
