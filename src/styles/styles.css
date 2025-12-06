@@ -1,0 +1,41 @@
+/* Portal Cinematic Overlay */
+.portal-cinematic-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.portal-cinematic-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Portal Cinematic Vignette */
+.portal-cinematic-overlay::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10000;
+
+  background: radial-gradient(
+    circle,
+    rgba(0, 0, 0, 0) 40%,      /* center bright */
+    rgba(0, 0, 0, 0.35) 65%,   /* soft darkening mid */
+    rgba(0, 0, 0, 0.65) 88%,   /* strong edge fade */
+    rgba(0, 0, 0, 0.85) 100%   /* vignette rim */
+  );
+
+  transition: opacity 1s ease-out;
+  opacity: 1;
+}
+
+/* Fade-out animation if you want to transition away later */
+.portal-cinematic-overlay.vignette-hide::after {
+  opacity: 0;
+}
